@@ -5,7 +5,20 @@
 
 using namespace std;
 
-unsigned long insert_sort (double* tab, int N){
+const int max_N = 100; // max size of a tab
+const int no_tabs = 1000; // number of uncorrelated assembles of tabs
+fstream log;
+
+void print_tab (double* tab, int tab_size, int iter){
+    if (tab_size == 10 && iter == 0){
+        for (int i = 0; i < tab_size; i++){
+            log << tab[i] << " ";
+        }
+        log << endl << endl;
+    }
+}
+
+unsigned long insert_sort (double* tab, int N, int iteration){
 
     double temp;
     unsigned long no_iterations = 0;
@@ -17,8 +30,12 @@ unsigned long insert_sort (double* tab, int N){
             tab[j+1] = tab[j];
             j--;
             no_iterations++;
+
+            print_tab(tab, N, iteration);
         }
         tab[j+1] = temp;
+
+        print_tab(tab, N,iteration);
     }
     return no_iterations;
 }
@@ -56,12 +73,12 @@ int main(){
     srand(time(NULL));
     fstream data_iterations;
     fstream data_complexity;
+
     data_iterations.open ("data_iterations.txt", ios::out);
     data_complexity.open ("data_complexity.txt", ios::out);
+    log.open("data_log.txt", ios::out);
 
     int size_N; // actual size of tab
-    const int no_tabs = 1000; // number of uncorrelated assembles of tabs
-    const int max_N = 100; // max size of a tab
     int iterations[no_tabs] = {0};
 
 
@@ -70,7 +87,7 @@ int main(){
         unsigned long sum = 0;  // expression used in order to calculate the average iterations as a tab size function
         for (int i = 0; i < no_tabs; i++){ // loop over randomly generated tabs of equal size
             double* tabs = generate_random_tab(size_N);
-            unsigned int no_iterations = insert_sort(tabs, size_N);
+            unsigned int no_iterations = insert_sort(tabs, size_N, i);
             sum += no_iterations;
 
             if (size_N == max_N){
@@ -86,6 +103,7 @@ int main(){
     make_histogram(data_iterations, iterations, no_tabs);
     data_complexity.close();
     data_iterations.close();
+    log.close();
 
 return 0;
 }
