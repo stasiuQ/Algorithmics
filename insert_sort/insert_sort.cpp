@@ -51,7 +51,7 @@ double* generate_random_tab (int N){
 void make_histogram (fstream& file, int* data_tab, int tab_size){
 
     const int no_elements = 100;
-    int grid = ((tab_size*tab_size)/200)/no_elements;
+    int grid = ((max_N*max_N)/2)/no_elements;
     int counter[no_elements] = {0};
 
     for (int i = 0; i < tab_size; i++){
