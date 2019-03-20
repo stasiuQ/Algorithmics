@@ -6,7 +6,7 @@
 using namespace std;
 
 const int max_N = 100; // max size of a tab
-const int no_tabs = 1000; // number of uncorrelated assembles of tabs
+const int no_tabs = 10000; // number of uncorrelated assembles of tabs
 int no_iterations;
 
 void print_tab (double* tab, int tab_size, int iter){
@@ -70,7 +70,7 @@ double* generate_random_tab (int N){
 void make_histogram (fstream& file, int* data_tab, int tab_size){
 
     const int no_elements = 100;
-    int grid = ((max_N*max_N)/4)/no_elements;
+    int grid = ((max_N*max_N)/10)/no_elements;
     int counter[no_elements] = {0};
 
     for (int i = 0; i < tab_size; i++){
@@ -88,7 +88,17 @@ void make_histogram (fstream& file, int* data_tab, int tab_size){
 }
 
 int main (){
-
+    /*
+    srand(time(NULL));
+    int size_N = 10;
+    for (int q = 0; q < 10; q++){
+        double* tabs = generate_random_tab(size_N);
+        print_tab(tabs, size_N, 10);
+        cout << quick_search(tabs, 0, size_N - 1, q) << endl;;
+        print_tab(tabs, size_N, 10);
+        delete[] tabs;
+    }
+    */
     srand(time(NULL));
     fstream data_iterations;
     fstream data_complexity;
