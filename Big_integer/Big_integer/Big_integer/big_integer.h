@@ -27,4 +27,5 @@ public:
 	friend big_integer operator / (const big_integer &a, const big_integer &b);
 	friend ostream& operator << (ostream& out, const big_integer &a);
 	friend big_integer add(const big_integer & a, const big_integer & b);
+	friend big_integer substact(const big_integer & a, const big_integer & b);
 };

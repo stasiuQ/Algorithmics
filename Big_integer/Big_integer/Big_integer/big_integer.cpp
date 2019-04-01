@@ -121,3 +121,35 @@ big_integer add(const big_integer & a, const big_integer & b) {
 
 	return temp;
 }
+
+big_integer substact(const big_integer & a, const big_integer & b) // substracting 2 positive sorted integers
+{
+	vector<int> a_number = a.number;
+	vector<int> b_number = b.number;
+	vector<int> temp_number;
+	string temp_string;
+
+	if (a_number.size() >= b_number.size() && a_number.back() >= b_number.back()) {
+		temp_number.push_back(0);
+		int i = b_number.end + 1;
+		for (i; i <= a_number.end; i++) {
+			b_number.push_back(0);
+		}
+		for (int q = 1; q <= a_number.end; q++) {
+			if (a_number[i] - b_number[i] < 0) {
+				a_number[i + 1]--;
+				temp_number[i] = a_number[i] - b_number[i] + 10;
+			}
+			else
+				temp_number[i] = a_number[i] - b_number[i];
+		}
+		temp_string.clear();
+		for (int q = temp_number.end; q >= 1; q--) {
+			char c = '0' + temp_number[q];
+			temp_string.push_back(c);
+		}
+	}
+	else
+		throw "Switch integers";
+	return big_integer(temp_string);
+}
