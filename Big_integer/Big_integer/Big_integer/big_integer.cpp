@@ -85,7 +85,48 @@ big_integer operator +(const big_integer & a, const big_integer & b)
 
 big_integer operator -(const big_integer & a, const big_integer & b)
 {
-	return big_integer();
+	big_integer temp;
+	if (a > b || a == b) {
+		if (a.number[0] == 0 && b.number[0] == 0) {
+			temp = substract(a, b);
+		}
+		else if (a.number[0] == 1 && b.number[0] == 1) {
+			temp = substract(a, b);
+			temp.number[0] = 1;
+			temp.string_number.insert(0, "-");
+			temp.array_size++;
+		}
+		else if (a.number[0] == 1 && b.number[0] == 0) {
+			temp = add(a, b);
+			temp.number[0] = 1;
+			temp.string_number.insert(0, "-");
+			temp.array_size++;
+		}
+		else if (a.number[0] == 0 && b.number[0] == 1) {
+			temp = add(a, b);
+		}
+	}
+	else if (a < b) {
+		if (a.number[0] == 0 && b.number[0] == 0) {
+			temp = substract(b, a);
+			temp.number[0] = 1;
+			temp.string_number.insert(0, "-");
+			temp.array_size++;
+		}
+		else if (a.number[0] == 1 && b.number[0] == 1) {
+			temp = substract(b, a);
+		}
+		else if (a.number[0] == 1 && b.number[0] == 0) {
+			temp = add(a, b);
+			temp.number[0] = 1;
+			temp.string_number.insert(0, "-");
+			temp.array_size++;
+		}
+		else if (a.number[0] == 0 && b.number[0] == 1) {
+			temp = add(a, b);
+		}
+	}
+	return temp;
 }
 
 big_integer operator *(const big_integer & a, const big_integer & b)
