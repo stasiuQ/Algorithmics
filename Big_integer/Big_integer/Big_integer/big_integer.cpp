@@ -48,9 +48,39 @@ big_integer & big_integer::operator =(const big_integer & b)
 
 big_integer operator +(const big_integer & a, const big_integer & b)
 {
-	string temp_number;
-
-	return big_integer();
+	big_integer temp;
+	if ((a.number[0] == 0) && (b.number[0] == 0)) {
+		temp = add(a, b);
+	}
+	else if ((a.number[0] == 1) && (b.number[0] == 1)) {
+		temp = add(a, b);
+		temp.number[0] = 1;
+		temp.string_number.insert(0, "-");
+		temp.array_size++;
+	}
+	else if ((a.number[0] == 0) && (b.number[0] == 1)) {
+		if (a > b || a == b) {
+			temp = substract(a, b);
+		}
+		else{
+			temp = substract(b, a);
+			temp.number[0] = 1;
+			temp.string_number.insert(0, "-");
+			temp.array_size++;
+		}
+	}
+	else if ((a.number[0] == 1) && (b.number[0] == 0)){
+		if (a < b || a == b) {
+			temp = substract(b, a);
+		}
+		else {
+			temp = substract(a, b);
+			temp.number[0] = 1;
+			temp.string_number.insert(0, "-");
+			temp.array_size++;
+		}
+	}
+	return temp;
 }
 
 big_integer operator -(const big_integer & a, const big_integer & b)
@@ -75,6 +105,57 @@ ostream & operator <<(ostream & out, const big_integer & a)
 }
 
 
+
+bool operator <(const big_integer & a, const big_integer & b) // just comparing modules
+{
+	if (a.number.size() > b.number.size())
+		return false;
+	else if (a.number.size() < b.number.size())
+		return true;
+	else {
+		for (int i = (a.number.size() - 1); i >= 1; i--) {
+			if (a.number[i] > b.number[i])
+				return false;
+			else if (a.number[i] < b.number[i])
+				return true;
+		}
+		return false;
+	}
+}
+
+bool operator >(const big_integer & a, const big_integer & b)
+{
+	if (a.number.size() < b.number.size())
+		return false;
+	else if (a.number.size() > b.number.size())
+		return true;
+	else {
+		for (int i = (a.number.size() - 1); i >= 1; i--) {
+			if (a.number[i] < b.number[i])
+				return false;
+			else if (a.number[i] > b.number[i])
+				return true;
+		}
+		return false;
+	}
+}
+
+bool operator ==(const big_integer & a, const big_integer & b)
+{
+	if (a.number[0] != b.number[0])
+		return false;
+	else if (a.number.size() != b.number.size())
+		return false;
+	else {
+		for (int i = (a.number.size() - 1); i >= 1; i--) {
+			if (a.number[i] != b.number[i])
+				return false;
+		}
+	}
+	return true;
+}
+
+
 big_integer add(const big_integer & a, const big_integer & b) {
 	big_integer temp;
 	int decimal_shift = 0;
@@ -82,7 +163,7 @@ big_integer add(const big_integer & a, const big_integer & b) {
 	temp.number.push_back(0);
 	while (i <= min(a.array_size, b.array_size)) {
 		temp.number.push_back((a.number[i] + b.number[i] + decimal_shift) % 10);
-		if ((a.number[i] + b.number[i] + decimal_shift) < 9)
+		if ((a.number[i] + b.number[i] + decimal_shift) <= 9)
 			decimal_shift = 0;
 		else
 			decimal_shift = 1;
@@ -91,7 +172,7 @@ big_integer add(const big_integer & a, const big_integer & b) {
 	if (a.array_size >= b.array_size) {
 		while (i <= a.array_size) {
 			temp.number.push_back((a.number[i] + decimal_shift) % 10);
-			if ((a.number[i] + decimal_shift) < 9)
+			if ((a.number[i] + decimal_shift) <= 9)
 				decimal_shift = 0;
 			else
 				decimal_shift = 1;
@@ -103,7 +184,7 @@ big_integer add(const big_integer & a, const big_integer & b) {
 	else {
 		while (i <= b.array_size) {
 			temp.number.push_back((b.number[i] + decimal_shift) % 10);
-			if ((b.number[i] + decimal_shift) < 9)
+			if ((b.number[i] + decimal_shift) <= 9)
 				decimal_shift = 0;
 			else
 				decimal_shift = 1;
@@ -122,29 +203,29 @@ big_integer add(const big_integer & a, const big_integer & b) {
 	return temp;
 }
 
-big_integer substact(const big_integer & a, const big_integer & b) // substracting 2 positive sorted integers
+big_integer substract(const big_integer & a, const big_integer & b) // substracting 2 positive sorted integers
 {
 	vector<int> a_number = a.number;
 	vector<int> b_number = b.number;
 	vector<int> temp_number;
 	string temp_string;
 
-	if (a_number.size() >= b_number.size() && a_number.back() >= b_number.back()) {
+	if (a > b || a == b) {
 		temp_number.push_back(0);
-		int i = b_number.end + 1;
-		for (i; i <= a_number.end; i++) {
+		int i = b_number.size();
+		for (i; i <= (a_number.size()-1); i++) {
 			b_number.push_back(0);
 		}
-		for (int q = 1; q <= a_number.end; q++) {
-			if (a_number[i] - b_number[i] < 0) {
-				a_number[i + 1]--;
-				temp_number[i] = a_number[i] - b_number[i] + 10;
+		for (int q = 1; q <= (a_number.size()-1); q++) {
+			if (a_number[q] - b_number[q] < 0) {
+				a_number[q + 1]--;
+				temp_number.push_back(a_number[q] - b_number[q] + 10);
 			}
 			else
-				temp_number[i] = a_number[i] - b_number[i];
+				temp_number.push_back(a_number[q] - b_number[q]);
 		}
 		temp_string.clear();
-		for (int q = temp_number.end; q >= 1; q--) {
+		for (int q = (temp_number.size()-1); q >= 1; q--) {
 			char c = '0' + temp_number[q];
 			temp_string.push_back(c);
 		}

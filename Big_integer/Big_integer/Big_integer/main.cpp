@@ -4,9 +4,9 @@
 using namespace std;
 
 int main() {
-	big_integer liczba("1982");
-	big_integer liczba2("18");
-	big_integer liczba3 = add(liczba, liczba2);
+	big_integer liczba("1239872");
+	big_integer liczba2("234967");
+	big_integer liczba3 = liczba + liczba2;
 
 	cout << liczba3 << endl;
 
