@@ -83,6 +83,18 @@ big_integer operator +(const big_integer & a, const big_integer & b)
 	return temp;
 }
 
+big_integer operator!(const big_integer & a)
+{
+	big_integer temp(1);
+	big_integer iterator(1);
+
+	while (iterator < (a + big_integer(1))) {
+		temp = temp * iterator;
+		iterator = iterator + big_integer(1);
+	}
+	return temp;
+}
+
 big_integer operator -(const big_integer & a, const big_integer & b)
 {
 	big_integer temp;

@@ -4,9 +4,8 @@
 using namespace std;
 
 int main() {
-	big_integer liczba("-19999");
-	big_integer liczba2("987");
-	big_integer liczba3 = liczba * liczba2;
+	big_integer liczba("10");
+	big_integer liczba3 = !liczba;
 
 
 	cout << liczba3 << endl;

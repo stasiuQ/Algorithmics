@@ -23,6 +23,7 @@ public:
 
 	big_integer& operator = (const big_integer &b);
 	friend big_integer operator + (const big_integer &a, const big_integer &b);
+	friend big_integer operator ! (const big_integer &a);
 	friend big_integer operator - (const big_integer &a, const big_integer &b);
 	friend big_integer operator * (const big_integer &a, const big_integer &b);
 	friend big_integer operator / (const big_integer &a, const big_integer &b);
