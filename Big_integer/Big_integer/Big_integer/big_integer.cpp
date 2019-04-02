@@ -273,18 +273,16 @@ big_integer substract(const big_integer & a, const big_integer & b) // substract
 	}
 	else
 		throw "Switch integers";
-	big_integer temp(temp_string);
-	int i = temp.number.size() -  1;
-	while ((temp.number[i] == 0) && (i > 1)) {
-		temp.number.erase(temp.number.end()-1);
-		temp.string_number.erase(temp.string_number.end()-1);
-		i--;
-	}
 
+	while ((temp_string[0] == '0') && (temp_string.size() > 1)) {
+		temp_string.erase(temp_string.begin());
+	}
+	big_integer temp(temp_string);
 	return temp;
 }
 
 big_integer karatsuba(const big_integer &a, const big_integer &b) {
+	cout << a.number.size() << " " << b.number.size() << endl;
 	if (a.number.size() == 2){
 		big_integer temp;
 		temp = b;
@@ -307,17 +305,17 @@ big_integer karatsuba(const big_integer &a, const big_integer &b) {
 
 		big_integer x_1; 
 		x_1 = a;
-		x_1.number.erase(x_1.number.begin()+1, x_1.number.begin() + m);
+		x_1.number.erase(x_1.number.begin()+1, x_1.number.begin() + m + 1);
 		big_integer x_0;
 		x_0 = a;
-		x_0.number.erase(x_0.number.begin() + m + 1, x_0.number.end()-1);
+		x_0.number.erase(x_0.number.begin() + m + 1, x_0.number.end());
 
 		big_integer y_1;
 		y_1 = b;
-		y_1.number.erase(y_1.number.begin() + 1, y_1.number.begin() + m);
+		y_1.number.erase(y_1.number.begin() + 1, y_1.number.begin() + m + 1);
 		big_integer y_0;
 		y_0 = b;
-		y_0.number.erase(y_0.number.begin() + m + 1, y_0.number.end()-1);
+		y_0.number.erase(y_0.number.begin() + m + 1, y_0.number.end());
 
 		big_integer z2 = karatsuba(x_1, y_1);
 		big_integer z1 = karatsuba(x_1, y_0) + karatsuba(x_0, y_1);
@@ -329,7 +327,7 @@ big_integer karatsuba(const big_integer &a, const big_integer &b) {
 			temp1.number.insert(temp1.number.begin() + 1, 0);
 		}
 		big_integer temp2;
-		temp2 = z1 - z2 - z0;
+		temp2 = z1 - z2 - z0;;
 		for (int i = 0; i < m; i++) {
 			temp2.number.insert(temp2.number.begin() + 1, 0);
 		}
