@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <cmath>
 
 
 using namespace std;
@@ -32,4 +33,5 @@ public:
 
 	friend big_integer add(const big_integer & a, const big_integer & b);
 	friend big_integer substract(const big_integer & a, const big_integer & b);
+	friend big_integer karatsuba(const big_integer & a, const big_integer & b);
 };

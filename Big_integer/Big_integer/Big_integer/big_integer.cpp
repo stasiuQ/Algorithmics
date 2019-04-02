@@ -177,7 +177,7 @@ bool operator >(const big_integer & a, const big_integer & b)
 			else if (a.number[i] > b.number[i])
 				return true;
 		}
-		return false;
+return false;
 	}
 }
 
@@ -254,10 +254,10 @@ big_integer substract(const big_integer & a, const big_integer & b) // substract
 	if (a > b || a == b) {
 		temp_number.push_back(0);
 		int i = b_number.size();
-		for (i; i <= (a_number.size()-1); i++) {
+		for (i; i <= (a_number.size() - 1); i++) {
 			b_number.push_back(0);
 		}
-		for (int q = 1; q <= (a_number.size()-1); q++) {
+		for (int q = 1; q <= (a_number.size() - 1); q++) {
 			if (a_number[q] - b_number[q] < 0) {
 				a_number[q + 1]--;
 				temp_number.push_back(a_number[q] - b_number[q] + 10);
@@ -266,12 +266,75 @@ big_integer substract(const big_integer & a, const big_integer & b) // substract
 				temp_number.push_back(a_number[q] - b_number[q]);
 		}
 		temp_string.clear();
-		for (int q = (temp_number.size()-1); q >= 1; q--) {
+		for (int q = (temp_number.size() - 1); q >= 1; q--) {
 			char c = '0' + temp_number[q];
 			temp_string.push_back(c);
 		}
 	}
 	else
 		throw "Switch integers";
-	return big_integer(temp_string);
+	big_integer temp(temp_string);
+	int i = temp.number.size() -  1;
+	while ((temp.number[i] == 0) && (i > 1)) {
+		temp.number.erase(temp.number.end()-1);
+		temp.string_number.erase(temp.string_number.end()-1);
+		i--;
+	}
+
+	return temp;
+}
+
+big_integer karatsuba(const big_integer &a, const big_integer &b) {
+	if (a.number.size() == 2){
+		big_integer temp;
+		temp = b;
+		for (int q = 1; q < a.number[1]; q++) {
+			temp = temp + b;
+		}
+		return temp;
+	}
+	else if (b.number.size() == 2) {
+		big_integer temp;
+		temp = a;
+		for (int q = 1; q < b.number[1]; q++) {
+			temp = temp + a;
+		}
+		return temp;
+	}
+	else {
+		int n = min(a.number.size(), b.number.size())-1;
+		int m = floor(n / 2);
+
+		big_integer x_1; 
+		x_1 = a;
+		x_1.number.erase(x_1.number.begin()+1, x_1.number.begin() + m);
+		big_integer x_0;
+		x_0 = a;
+		x_0.number.erase(x_0.number.begin() + m + 1, x_0.number.end()-1);
+
+		big_integer y_1;
+		y_1 = b;
+		y_1.number.erase(y_1.number.begin() + 1, y_1.number.begin() + m);
+		big_integer y_0;
+		y_0 = b;
+		y_0.number.erase(y_0.number.begin() + m + 1, y_0.number.end()-1);
+
+		big_integer z2 = karatsuba(x_1, y_1);
+		big_integer z1 = karatsuba(x_1, y_0) + karatsuba(x_0, y_1);
+		big_integer z0 = karatsuba(x_0, y_0);
+
+		big_integer temp1;
+		temp1 = z2;
+		for (int i = 0; i < m * 2; i++) {
+			temp1.number.insert(temp1.number.begin() + 1, 0);
+		}
+		big_integer temp2;
+		temp2 = z1 - z2 - z0;
+		for (int i = 0; i < m; i++) {
+			temp2.number.insert(temp2.number.begin() + 1, 0);
+		}
+
+		return (temp1 + temp2 + z0);
+
+	}
 }
