@@ -131,7 +131,21 @@ big_integer operator -(const big_integer & a, const big_integer & b)
 
 big_integer operator *(const big_integer & a, const big_integer & b)
 {
-	return big_integer();
+	big_integer a_num = a;
+	big_integer b_num = b;
+	
+	a_num.number[0] = 0;   // cancelling the sign
+	b_num.number[0] = 0;
+	big_integer temp;
+	if ((a.number[0] == 0 && b.number[0] == 0) || (a.number[0] == 1 && b.number[0] == 1))
+		temp = karatsuba(a_num, b_num);
+	else {
+		temp = karatsuba(a_num, b_num);
+		temp.number[0] = 1;
+		temp.string_number.insert(0, "-");
+		temp.array_size++;
+	}
+	return temp;
 }
 
 big_integer operator /(const big_integer & a, const big_integer & b)
@@ -202,7 +216,7 @@ big_integer add(const big_integer & a, const big_integer & b) {
 	int decimal_shift = 0;
 	int i = 1;
 	temp.number.push_back(0);
-	while (i <= min(a.array_size, b.array_size)) {
+	while (i <= min(a.number.size()-1, b.number.size()-1)) {
 		temp.number.push_back((a.number[i] + b.number[i] + decimal_shift) % 10);
 		if ((a.number[i] + b.number[i] + decimal_shift) <= 9)
 			decimal_shift = 0;
@@ -210,8 +224,8 @@ big_integer add(const big_integer & a, const big_integer & b) {
 			decimal_shift = 1;
 		i++;
 	}
-	if (a.array_size >= b.array_size) {
-		while (i <= a.array_size) {
+	if (a.number.size() >= b.number.size()) {
+		while (i <= a.number.size()-1) {
 			temp.number.push_back((a.number[i] + decimal_shift) % 10);
 			if ((a.number[i] + decimal_shift) <= 9)
 				decimal_shift = 0;
@@ -223,7 +237,7 @@ big_integer add(const big_integer & a, const big_integer & b) {
 			temp.number.push_back(1);
 	}
 	else {
-		while (i <= b.array_size) {
+		while (i <= b.number.size()-1) {
 			temp.number.push_back((b.number[i] + decimal_shift) % 10);
 			if ((b.number[i] + decimal_shift) <= 9)
 				decimal_shift = 0;
@@ -231,7 +245,7 @@ big_integer add(const big_integer & a, const big_integer & b) {
 				decimal_shift = 1;
 			i++;
 		}
-		if (decimal_shift = 1)
+		if (decimal_shift == 1)
 			temp.number.push_back(1);
 	}
 	temp.array_size = temp.number.size() - 1; // because, for now, temp is always possitive, be like temp :)
@@ -282,7 +296,8 @@ big_integer substract(const big_integer & a, const big_integer & b) // substract
 }
 
 big_integer karatsuba(const big_integer &a, const big_integer &b) {
-	cout << a.number.size() << " " << b.number.size() << endl;
+	if (a == big_integer(0) || b == big_integer(0))
+		return big_integer(0);
 	if (a.number.size() == 2){
 		big_integer temp;
 		temp = b;
@@ -303,31 +318,25 @@ big_integer karatsuba(const big_integer &a, const big_integer &b) {
 		int n = min(a.number.size(), b.number.size())-1;
 		int m = floor(n / 2);
 
-		big_integer x_1; 
-		x_1 = a;
+		big_integer x_1 = a; 
 		x_1.number.erase(x_1.number.begin()+1, x_1.number.begin() + m + 1);
-		big_integer x_0;
-		x_0 = a;
+		big_integer x_0 = a;
 		x_0.number.erase(x_0.number.begin() + m + 1, x_0.number.end());
 
-		big_integer y_1;
-		y_1 = b;
+		big_integer y_1 = b;
 		y_1.number.erase(y_1.number.begin() + 1, y_1.number.begin() + m + 1);
-		big_integer y_0;
-		y_0 = b;
+		big_integer y_0 = b;
 		y_0.number.erase(y_0.number.begin() + m + 1, y_0.number.end());
 
 		big_integer z2 = karatsuba(x_1, y_1);
 		big_integer z1 = karatsuba(x_1, y_0) + karatsuba(x_0, y_1);
 		big_integer z0 = karatsuba(x_0, y_0);
 
-		big_integer temp1;
-		temp1 = z2;
+		big_integer temp1 = z2;
 		for (int i = 0; i < m * 2; i++) {
 			temp1.number.insert(temp1.number.begin() + 1, 0);
 		}
-		big_integer temp2;
-		temp2 = z1 - z2 - z0;;
+		big_integer temp2 = z1;
 		for (int i = 0; i < m; i++) {
 			temp2.number.insert(temp2.number.begin() + 1, 0);
 		}
