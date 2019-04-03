@@ -23,7 +23,6 @@ public:
 
 	big_integer& operator = (const big_integer &b);
 	friend big_integer operator + (const big_integer &a, const big_integer &b);
-	friend big_integer operator ! (const big_integer &a);
 	friend big_integer operator - (const big_integer &a, const big_integer &b);
 	friend big_integer operator * (const big_integer &a, const big_integer &b);
 	friend big_integer operator / (const big_integer &a, const big_integer &b);
@@ -31,8 +30,11 @@ public:
 	friend bool operator <(const big_integer & a, const big_integer & b);
 	friend bool operator >(const big_integer & a, const big_integer & b);
 	friend bool operator ==(const big_integer & a, const big_integer & b);
+	friend big_integer pow(const big_integer & a, unsigned int i);
+	friend big_integer factorial(const big_integer &a);
 
 	friend big_integer add(const big_integer & a, const big_integer & b);
 	friend big_integer substract(const big_integer & a, const big_integer & b);
 	friend big_integer karatsuba(const big_integer & a, const big_integer & b);
+
 };

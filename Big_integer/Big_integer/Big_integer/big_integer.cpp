@@ -83,7 +83,7 @@ big_integer operator +(const big_integer & a, const big_integer & b)
 	return temp;
 }
 
-big_integer operator!(const big_integer & a)
+big_integer factorial(const big_integer & a)
 {
 	big_integer temp(1);
 	big_integer iterator(1);
@@ -220,6 +220,19 @@ bool operator ==(const big_integer & a, const big_integer & b)
 		}
 	}
 	return true;
+}
+
+big_integer pow(const big_integer & a, unsigned int i)
+{
+	big_integer temp = a;
+	if (i == 0)
+		return big_integer(1);
+	else {
+		for (int q = 1; q < i; q++) {
+			temp = temp * a;
+		}
+	}
+	return temp;
 }
 
 
