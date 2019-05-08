@@ -354,14 +354,14 @@ big_integer karatsuba(const big_integer &a, const big_integer &b) {
 		y_0.number.erase(y_0.number.begin() + m + 1, y_0.number.end());
 
 		big_integer z2 = karatsuba(x_1, y_1);
-		big_integer z1 = karatsuba(x_1, y_0) + karatsuba(x_0, y_1);
+		big_integer z1 = karatsuba((x_0 + x_1), (y_0 + y_1));
 		big_integer z0 = karatsuba(x_0, y_0);
 
 		big_integer temp1 = z2;
 		for (int i = 0; i < m * 2; i++) {
 			temp1.number.insert(temp1.number.begin() + 1, 0);
 		}
-		big_integer temp2 = z1;
+		big_integer temp2 = z1 - z2 - z0;
 		for (int i = 0; i < m; i++) {
 			temp2.number.insert(temp2.number.begin() + 1, 0);
 		}
