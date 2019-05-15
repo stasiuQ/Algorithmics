@@ -14,8 +14,8 @@ int main() {
 	probe_A.open("probe_A.txt", ios::out);
 	probe_B.open("probe_B.txt", ios::out);
 
-	const int N = 100000;   // number of uncorrelated experiments
-	const double P = 0.1;  // probability of single Bernoulli try
+	const int N = 1000000;   // number of uncorrelated experiments
+	const double P = 0.2;  // probability of single Bernoulli try
 
 	vector<double> histogram1 = geometric_dist(N, P);
 	print_vector(geo_distr, histogram1);
