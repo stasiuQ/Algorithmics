@@ -2,6 +2,8 @@ clear
 clc
 close all
 
+data = fopen('data.txt', 'w');
+
 %parameters:
 size = 6;
 alpha = 0.0;
@@ -11,7 +13,7 @@ threshold = 1e-16;
 %matrix
 P = [0 0 0 0.5 0.5 0; 0 0 0.5 0 0 0.5;
     0.2 0.2 0 0.2 0.2 0.2; 1 0 0 0 0 0;
-    0 0.5 0 0.5 0 0; 1/6 1/6 1/6 1/6 1/6 1/6];
+    0 0 0 1 0 0; 1/6 1/6 1/6 1/6 1/6 1/6];
 
 %Google matrix
 MG = (1-alpha)*P + (alpha/size)*ones(size,size);
@@ -38,4 +40,10 @@ end
 
 disp(distribution);
 disp(sum(distribution));
+
+for i = 1:length(distribution)
+fprintf(data, '%f   %f\n', i, distribution(i));
+end
+
+fclose(data);
 
